@@ -18,10 +18,30 @@ For this lab you will
 
 Visit [SQL Try Editor at W3Schools.com](https://www.w3schools.com/Sql/tryit.asp?filename=trysql_select_top) using the **Google Chrome (or Chromium if you use Linux) browser** and write _SQL queries_ for the following requirements:
 
-- Display the ProductName and CategoryName for all products in the database. Shows 76 records.
+- Display the ProductName and CategoryName for all products in the database. Shows 77 records.
+
+SELECT ProductName, CategoryName FROM Products
+JOIN Categories ON Products.CategoryID = Categories.CategoryID
+
 - Display the OrderID and ShipperName for all orders placed before January 9, 1997. Shows 161 records.
+
+SELECT * FROM Orders
+JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+WHERE Orders.OrderDate < '1997-01-09'; 
+
 - Display all ProductNames and Quantities placed on order 10251. Sort by ProductName. Shows 3 records.
+
+SELECT ProductName, Quantity FROM OrderDetails
+JOIN Products ON Products.ProductID = OrderDetails.ProductID
+WHERE OrderID = '10251'
+ORDER BY ProductName;
+
 - Display the OrderID, CustomerName and the employee's LastName for every order. All columns should be labeled clearly. Displays 196 records.
+
+SELECT OrderID, CustomerName AS Customer, LastName AS Employee FROM Orders
+JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID;
+
 
 ### Database Methods
 
@@ -83,7 +103,18 @@ The following endpoints are available to test the functionality of the model met
 
 - In [SQL Try Editor at W3Schools.com](https://www.w3schools.com/Sql/tryit.asp?filename=trysql_select_top):
   - Displays CategoryName and a new column called Count that shows how many products are in each category. Shows 9 records.
+
+SELECT CategoryName AS Category, COUNT(CategoryName) AS Total FROM Categories
+JOIN Products ON Categories.CategoryID = Products.CategoryID
+GROUP BY CategoryName;
+
   - Display OrderID and a column called ItemCount that shows the total number of products placed on the order. Shows 196 records.
+
+SELECT Quantity, Orders.OrderID FROM OrderDetails
+JOIN Orders ON OrderDetails.OrderID = Orders.OrderID
+GROUP BY Orders.OrderID;
+
+
 - Add the following method to your API
   - `addStep(step, scheme_id)`: This method expects a step object and a scheme id. It inserts the new step into the database, correctly linking it to the intended scheme.
   - You may use `POST /api/schemes/:id/addStep` to test this method.
